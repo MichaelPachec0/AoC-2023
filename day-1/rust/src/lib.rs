@@ -39,4 +39,12 @@ mod tests {
 
         Ok(())
     }
+    #[test]
+    fn part_1() -> Result<(), Box<dyn std::error::Error>> {
+        let digits = part_1_helper("../input.txt")?;
+        println!("{digits}");
+        assert_eq!(digits, 53194);
+
+        Ok(())
+    }
 }
