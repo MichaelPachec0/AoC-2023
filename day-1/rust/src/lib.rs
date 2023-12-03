@@ -4,9 +4,8 @@ mod tests {
     fn reader(path: &str) -> Result<String, Box<dyn std::error::Error>> {
         Ok(fs::read_to_string(path)?.parse()?)
     }
-    #[test]
-    fn sample() -> Result<(), Box<dyn std::error::Error>> {
-        let sample_text = reader("../sample.txt")?;
+    fn part_1_helper(location: &str) -> Result<u32, Box<dyn std::error::Error>> {
+        let sample_text = reader(location)?;
         let sample_list = sample_text
             .split('\n')
             .map(String::from)
@@ -30,6 +29,11 @@ mod tests {
                 head * 10 + tail
             })
             .sum();
+        Ok(digits)
+    }
+    #[test]
+    fn sample() -> Result<(), Box<dyn std::error::Error>> {
+        let digits = part_1_helper("../sample.txt")?;
         println!("{digits}");
         assert_eq!(digits, 142);
 
