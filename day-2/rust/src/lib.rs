@@ -165,4 +165,23 @@ mod tests {
 
         Ok(())
     }
+    #[test]
+    fn parts() -> Result<(), Box<dyn std::error::Error>> {
+        let limit = (12, 13, 14);
+        let data = reader("../input.txt")?;
+        let data = declarative_helper(&data)?
+            .into_iter()
+            .enumerate()
+            .map(|(id, game)| {
+                let mut x = Game::new(*game, id + 1, limit);
+                x.format_colors();
+                x
+            })
+            .collect::<Vec<Game>>();
+        println!(
+            "PART 1: {}",
+            data.iter().map(Game::process_game).sum::<usize>()
+        );
+        Ok(())
+    }
 }
