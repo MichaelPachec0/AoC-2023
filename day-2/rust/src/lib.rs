@@ -80,6 +80,53 @@ impl Game {
             .map(String::from)
             .collect::<Vec<String>>()
     }
+    fn format_colors(&mut self) {
+        self.steps.iter().for_each(|step| {
+            for block in step.split(',') {
+                // println!("BLOCK: {block}");
+                if block.ends_with("blue") {
+                    if let Some(entry) = block.split_whitespace().next() {
+                        // println!("GAME: {} entry: {} color {}", self.id, entry, "blue");
+                        if let Ok(number) = usize::from_str_radix(entry, 10) {
+                            if number > self.blocks.blue {
+                                self.blocks.blue = number;
+                            }
+                        }
+                    }
+                } else if block.ends_with("red") {
+                    if let Some(entry) = block.split_whitespace().next() {
+                        // println!("GAME: {} entry: {} color {}", self.id, entry, "red");
+                        if let Ok(number) = usize::from_str_radix(entry, 10) {
+                            if number > self.blocks.red {
+                                self.blocks.red = number;
+                            }
+                        }
+                    }
+                } else if block.ends_with("green") {
+                    if let Some(entry) = block.split_whitespace().next() {
+                        // println!("GAME: {} entry: {} color {}", self.id, entry, "green");
+                        if let Ok(number) = usize::from_str_radix(entry, 10) {
+                            if number > self.blocks.green {
+                                self.blocks.green = number;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+    fn valid_game(&self) -> bool {
+        !(self.blocks.red > self.limit.red
+            || self.blocks.green > self.limit.green
+            || self.blocks.blue > self.limit.blue)
+    }
+    fn process_game(&self) -> usize {
+        if self.valid_game() {
+            self.id
+        } else {
+            0
+        }
+    }
 }
 #[cfg(test)]
 mod tests {
@@ -104,6 +151,17 @@ mod tests {
             .collect::<Vec<Game>>();
         println!("{x:?}");
         println!("LETS TRY THIS! ");
+        x.iter_mut().for_each(|game| {
+            game.format_colors();
+            println!(
+                "GAME: {} is_valid: {} blocks {:?}",
+                game.id,
+                game.valid_game(),
+                game.blocks
+            );
+        });
+        assert_eq!(x.iter().map(Game::process_game).sum::<usize>(), 8);
+        // println!("{x:?}");
 
         Ok(())
     }
